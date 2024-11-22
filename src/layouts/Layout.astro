@@ -3,29 +3,26 @@ import { SEO } from "astro-seo";
 import Footer from "@components/footer.astro";
 import Navbar from "@components/navbar/navbar.astro";
 import "@fontsource-variable/inter/index.css";
-import '@fontsource-variable/bricolage-grotesque';
-
-
+import "@fontsource-variable/bricolage-grotesque";
 
 export interface Props {
   title: string;
 }
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
-
-const resolvedImageWithDomain = new URL(
-  "/opengraph.jpg",
-  Astro.site
+const canonicalURL = new URL(
+  "/contact",
+  "https://www.ondrejrajnet.cz",
 ).toString();
+const resolvedImageWithDomain = new URL("/portrait.jpg", Astro.site).toString();
 
 const { title } = Astro.props;
 
 const makeTitle = title
-  ? title + " | " + "Astroship"
-  : "Astroship - Starter Template for Astro with Tailwind CSS";
+  ? `${title} | Ondřej Rajnet`
+  : "Ondřej Rajnet - Oficiální web";
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -36,22 +33,22 @@ const makeTitle = title
     <!-- <link rel="preload" as="image" href={src} alt="Hero" /> -->
     <SEO
       title={makeTitle}
-      description="Astroship is a starter website template for Astro built with TailwindCSS."
+      description="Oficiální web Ondřeje Rajneta. Nabízím konzultace a služby v oblasti financí, investic a mindsetu."
       canonical={canonicalURL}
       twitter={{
-        creator: "@surjithctly",
-        site: "@web3templates",
+        creator: "@ondrejrajnet", // Pokud nemáte Twitter, můžete smazat
+        site: "@ondrejrajnet", // nebo nechat prázdné
         card: "summary_large_image",
       }}
       openGraph={{
         basic: {
           url: canonicalURL,
           type: "website",
-          title: `Astroship - Starter Template for Astro`,
-          image: resolvedImageWithDomain,
+          title: `Ondřej Rajnet - Osobní web`,
+          image: resolvedImageWithDomain, // Ponechejte tuto hodnotu, pokud je cesta k obrázku správná
         },
         image: {
-          alt: "Astroship Homepage Screenshot",
+          alt: "Ondřej Rajnet - Náhled webu",
         },
       }}
     />
