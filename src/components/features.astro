@@ -4,64 +4,77 @@ import { Icon } from "astro-icon/components";
 
 const features = [
   {
-    title: "Bring Your Own Framework",
+    title: "Investice",
     description:
-      "Build your site using React, Svelte, Vue, Preact, web components, or just plain ol' HTML + JavaScript.",
-    icon: "bx:bxs-briefcase",
+      "Nemusíte na to být sami. Ukážu vám cestu, jak budovat své portfolio bez zbytečných chyb. Společně najdeme strategie, které vám přinesou výsledky.",
+    icon: "bx:bxs-chart",
   },
   {
-    title: "100% Static HTML, No JS",
+    title: "Finance",
     description:
-      "Astro renders your entire page to static HTML, removing all JavaScript from your final build by default.",
-    icon: "bx:bxs-window-alt",
+      "Naučím vás, jak efektivně spravovat své příjmy a výdaje, aniž byste museli zkoušet metodu pokus-omyl. Pomůžu vám najít cestu k finanční stabilitě a růstu.",
+    icon: "bx:bxs-wallet",
   },
   {
-    title: "On-Demand Components",
+    title: "Mindset",
     description:
-      "Need some JS? Astro can automatically hydrate interactive components when they become visible on the page.  ",
-    icon: "bx:bxs-data",
-  },
-  {
-    title: "Broad Integration",
-    description:
-      "Astro supports TypeScript, Scoped CSS, CSS Modules, Sass, Tailwind, Markdown, MDX, and any other npm packages.",
-    icon: "bx:bxs-bot",
-  },
-  {
-    title: "SEO Enabled",
-    description:
-      "Automatic sitemaps, RSS feeds, pagination and collections take the pain out of SEO and syndication. It just works!",
-    icon: "bx:bxs-file-find",
-  },
-  {
-    title: "Community",
-    description:
-      "Astro is an open source project powered by hundreds of contributors making thousands of individual contributions.",
-    icon: "bx:bxs-user",
+      "Přeprogramovat své myšlení o penězích může být náročné, ale nemusíte na to být sami. Budu tu s vámi, abych vám pomohl změnit pohled na finance a vyhnout se zbytečným překážkám.",
+    icon: "bx:bxs-brain",
   },
 ];
 ---
 
-<div class="mt-16 md:mt-0">
+<div class="mt-16 md:mt-0 bg-gray-100 p-6 rounded-lg shadow">
   <h2 class="text-4xl lg:text-5xl font-bold lg:tracking-tight">
-    Everything you need to start a website
+    Osobní příběh
   </h2>
-  <p class="text-lg mt-4 text-slate-600">
-    Astro comes batteries included. It takes the best parts of state-of-the-art
-    tools and adds its own innovations.
+</br>
+  <p>
+    Vítej na mých osobních stránkách! Pomáhám lidem změnit přístup k financím, myšlení a životu, a zároveň sdílím cestu k finanční svobodě skrze základy investování.
+    Nejde jen o peníze – jde o tebe, tvůj mindset a rozhodnutí, která tě mohou přiblížit naplněnému a svobodnému životu.
   </p>
+</br>
+  <p>
+    Jmenuji se je Ondřej Rajnet a investování se věnuji už několik let. Na začátku jsem nevěděl nic. 
+    Měl jsem strach, spoustu otázek a pocit, že nejsem dost dobrý na to, abych se sám pustil do investování. 
+    Nevěřil jsem si a nechával jsem své finance v rukou institucí, které mi nakonec nepřinesly očekávané výsledky. 
+    To mě naučilo, že pokud chci mít kontrolu nad svými financemi i životem, musím vzít odpovědnost do vlastních rukou.
+    Tento e-book jsem napsal proto, abych ti pomohl vyhnout se chybám, které jsem udělal já. 
+    Chci ti ukázat, že každá cesta začíná prvním krokem – a že změna mindsetu a zlepšení vztahu k penězům jsou klíčové kroky k úspěchu. Naučím tě, jak se na finance dívat jinak, jak začít investovat bez zbytečných obav a jak vybudovat návyky, které ti přinesou stabilitu a spokojenost.
+  </p>
+</br>
+  <p>
+    Díky svým zkušenostem jsem pochopil, že peníze nejsou jen prostředkem k dosažení cílů. 
+    Jsou nástrojem svobody, pokud s nimi zacházíme vědomě a zodpovědně. 
+    Provedu tě nejen mými osobními zkušenostmi a lekcemi, ale nabídnu ti také konkrétní kroky, jak začít budovat své bohatství a dosáhnout dlouhodobých výsledků.
+  </p>
+  </p>
+</div>
+</br>
+<div class="mt-16 md:mt-0 bg-gray-100 p-6 rounded-lg shadow">
+  <h2 class="text-4xl lg:text-5xl font-bold lg:tracking-tight">
+    Proč to dělám?
+  </h2>
+</br>
+<p>Věřím, že každý by měl mít možnost svobodně rozhodovat o svých financích a budovat si lepší budoucnost. Bohužel, praxe bank, pojišťoven a finančních institucí často klienty spíše znevýhodňuje. Namísto transparentnosti a férových nabídek jim prodávají produkty, které nepotřebují a které jim nepřinášejí skutečný užitek.</p>
+				</br>
+						<p>Tohle mě vedlo k rozhodnutí jít jinou cestou. Chci lidem ukázat, že existují lepší možnosti, jak s penězi nakládat. Naučím vás, jak investovat s rozvahou, dlouhodobě budovat bohatství a zároveň si zachovat plnou kontrolu nad svými financemi.</p>
+					</br>		
+							<p>Ať už je vaším cílem vlastní bydlení, cestování po světě nebo finanční nezávislost v důchodu, správné hospodaření s penězi a investování vám mohou tyto sny splnit. Peníze jsou nástroj, který vám může otevřít dveře k vysněnému životu – a já vám chci ukázat, jak tento nástroj efektivně využít.</p>
+						</br>		
+								<p>Společně můžeme změnit váš přístup k financím a vytvořit pevný základ pro svobodu, klid a spokojenost.</p>
 </div>
 
 <div class="grid sm:grid-cols-2 md:grid-cols-3 mt-16 gap-16">
   {
     features.map((item) => (
-      <div class="flex gap-4 items-start">
+      <div class="flex gap-4 items-start bg-gray-100 p-6 rounded-lg shadow">
         <div class="mt-1 bg-black rounded-full  p-2 w-8 h-8 shrink-0">
           <Icon class="text-white" name={item.icon} />
         </div>
         <div>
           <h3 class="font-semibold text-lg">{item.title}</h3>{" "}
-          <p class="text-slate-500 mt-2 leading-relaxed">{item.description}</p>
+          <p class="text-black mt-2 leading-relaxed">{item.description}</p>
         </div>
       </div>
     ))
