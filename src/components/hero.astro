@@ -1,12 +1,15 @@
 ---
 import { Picture } from "astro:assets";
 import personalImage from "assets/portrait.jpg"
-import Link from "@components/ui/link.astro";
+import Link from "./ui/link.astro";
+import Button from "./ui/button.astro";
 import { Icon } from "astro-icon/components";
+
+const status = (Astro.cookies.get("status") || {})?.value;
+Astro.cookies.delete("status");
 ---
 
-<main
-  class="grid lg:grid-cols-2 place-items-center pt-16 pb-8 md:pt-12 md:pb-24">
+<main class="grid lg:grid-cols-2 place-items-center pt-16 pb-8 md:pt-12 md:pb-24">
   <div class="py-6 md:order-1 hidden md:block">
     <Picture
       src={personalImage}
@@ -14,26 +17,36 @@ import { Icon } from "astro-icon/components";
       widths={[200, 400, 600]}
       sizes="(max-width: 800px) 100vw, 620px"
       loading="eager"
-      format="avif"
+      formats={['avif', 'webp']}
     />
   </div>
   <div>
-    <h1
-      class="text-5xl lg:text-6xl xl:text-7xl font-bold lg:tracking-tight xl:tracking-tighter">
+    <h1 class="text-5xl lg:text-6xl xl:text-7xl font-bold lg:tracking-tight xl:tracking-tighter">
       Jmenuji se Ondřej Rajnet
     </h1>
     <p class="text-lg mt-4 text-slate-600 max-w-xl">
-      Jsem finanční průvodce, který pomáhá lidem zlepšit jejich vztah k penězům a dosáhnout finanční nezávislosti. Sdílím své zkušenosti a  nabízím  komplexní  spolupráci  včetně  vzdělávání,  motivace  a  individuálního  poradenství.
+      Jsem finanční průvodce, který pomáhá lidem zlepšit jejich vztah k penězům a dosáhnout finanční nezávislosti. Sdílím své zkušenosti a nabízím komplexní spolupráci včetně vzdělávání, motivace a individuálního poradenství.
     </p>
+
+    {status}
+    {status && <p class="text-lg mt-4 text-green-500 max-w-xl">{status}</p>}
+
     <div class="mt-6 flex flex-col sm:flex-row gap-3">
-      <Link
-        href="#"
-        target="_blank"
-        class="flex gap-1 items-center justify-center"
-        rel="noopener">
-        <Icon class="text-white w-5 h-5" name="bx:bxs-cloud-download" />
+      <input
+        type="text"
+        placeholder="E-mail"
+        id="email-input"
+        required
+        class="w-full px-4 py-3 border-2 placeholder:text-gray-800 rounded-md outline-none focus:ring-4 border-gray-300 focus:border-gray-600 ring-gray-100"
+        name="name"
+      />
+      
+      <Button type="button" size="md" block id="send-email-btn">
         E-BOOK ZDARMA
-      </Link>
+      </Button>
+    </div>
+
+    <div class="mt-2">
       <Link
         size="lg"
         style="outline"
@@ -42,9 +55,35 @@ import { Icon } from "astro-icon/components";
         class="flex gap-1 items-center justify-center"
         target="_blank">
         <Icon class="text-black w-4 h-4" name="bx:bxs-video" />
-         Úvodní video
+        Úvodní video
       </Link>
     </div>
   </div>
-
 </main>
+
+<script>
+  // Client-side JavaScript
+  const handleSendEmail = async () => {
+    const emailInput = document.getElementById('email-input');
+    const email = (emailInput as HTMLInputElement)?.value;
+    
+    console.log("send email");
+    const formData = new FormData();
+    formData.append("recipient", email);
+    formData.append("subject", "E-BOOK ZDARMA");
+    
+    try {
+      const response = await fetch("/api/send-email", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error("Error sending email:", error);
+    }
+  };
+
+  // Add event listener to the button
+  document.getElementById('send-email-btn')?.addEventListener('click', handleSendEmail);
+</script>
