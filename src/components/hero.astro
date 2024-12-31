@@ -4,9 +4,6 @@ import personalImage from "assets/portrait.jpg"
 import Link from "./ui/link.astro";
 import Button from "./ui/button.astro";
 import { Icon } from "astro-icon/components";
-
-const status = (Astro.cookies.get("status") || {})?.value;
-Astro.cookies.delete("status");
 ---
 
 <main class="grid lg:grid-cols-2 place-items-center pt-16 pb-8 md:pt-12 md:pb-24">
@@ -28,23 +25,28 @@ Astro.cookies.delete("status");
       Jsem finanční průvodce, který pomáhá lidem zlepšit jejich vztah k penězům a dosáhnout finanční nezávislosti. Sdílím své zkušenosti a nabízím komplexní spolupráci včetně vzdělávání, motivace a individuálního poradenství.
     </p>
 
-    {status}
-    {status && <p class="text-lg mt-4 text-green-500 max-w-xl">{status}</p>}
+    <div id="status-message" class:list={["text-lg mt-4 max-w-xl hidden"]}></div>
 
-    <div class="mt-6 flex flex-col sm:flex-row gap-3">
+   <div id="error-message" class:list={["text-lg mt-4 text-red-500 max-w-xl hidden"]}></div>
+
+    <form 
+      class="mt-6 flex flex-col sm:flex-row gap-3"
+      method="POST"
+      id="email-form"
+    >
       <input
         type="text"
         placeholder="E-mail"
-        id="email-input"
         required
         class="w-full px-4 py-3 border-2 placeholder:text-gray-800 rounded-md outline-none focus:ring-4 border-gray-300 focus:border-gray-600 ring-gray-100"
-        name="name"
+        name="recipient"
       />
-      
-      <Button type="button" size="md" block id="send-email-btn">
+      <input type="hidden" name="subject" value="E-BOOK ZDARMA" />
+
+      <Button type="submit" size="md" block>
         E-BOOK ZDARMA
       </Button>
-    </div>
+    </form>
 
     <div class="mt-2">
       <Link
@@ -62,28 +64,55 @@ Astro.cookies.delete("status");
 </main>
 
 <script>
-  // Client-side JavaScript
-  const handleSendEmail = async () => {
-    const emailInput = document.getElementById('email-input');
-    const email = (emailInput as HTMLInputElement)?.value;
-    
-    console.log("send email");
-    const formData = new FormData();
-    formData.append("recipient", email);
-    formData.append("subject", "E-BOOK ZDARMA");
-    
-    try {
-      const response = await fetch("/api/send-email", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.error("Error sending email:", error);
-    }
-  };
+  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  // Add event listener to the button
-  document.getElementById('send-email-btn')?.addEventListener('click', handleSendEmail);
+function isValidEmail(email: string): boolean {
+  return EMAIL_REGEX.test(email);
+}
+
+  const form = document.getElementById('email-form') as HTMLFormElement;
+  const statusMessage = document.getElementById('status-message');
+  const errorMessage = document.getElementById('error-message');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(form);
+    const email = formData.get('recipient') as string;
+
+    // Clear previous messages
+    statusMessage?.classList.add('hidden');
+    errorMessage?.classList.add('hidden');
+    errorMessage?.classList.remove('text-red-500', 'text-green-500');
+
+    // Validate email
+    if (email && !isValidEmail(email)) {
+      errorMessage!.textContent = "Neplatný e-mail";
+      errorMessage?.classList.remove('hidden');
+      errorMessage?.classList.add('text-red-500');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        body: formData
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        statusMessage!.textContent = "Email byl odeslán.";
+        statusMessage?.classList.remove('hidden');
+        statusMessage?.classList.add('text-green-500');
+        form.reset();
+      } else {
+        throw new Error(result.error || 'Something went wrong');
+      }
+    } catch (error) {
+      errorMessage!.textContent = "Něco se pokazilo!!!";
+      errorMessage?.classList.remove('hidden');
+      errorMessage?.classList.add('text-red-500');
+    }
+  });
 </script>

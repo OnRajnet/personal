@@ -1,0 +1,29 @@
+---
+interface Props {
+  recipientEmail: string;
+}
+
+const { recipientEmail } = Astro.props;
+---
+
+<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+  <h1 style="color: #1a1a1a;">Váš E-book je zde! 📚</h1>
+  
+  <p>Dobrý den,</p>
+  
+  <p>děkuji za váš zájem. V příloze najdete slíbený e-book.</p>
+  
+  <p>
+    Pokud budete mít jakékoliv dotazy, neváhejte mě kontaktovat na emailu{' '}
+    <a href="mailto:ondrej@rajnet.cz" style="color: #2563eb;">
+      ondrej@rajnet.cz
+    </a>
+  </p>
+  
+  <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e5e7eb;">
+    <p style="color: #4b5563; font-size: 0.875rem;">
+      S přáním hezkého dne,<br />
+      Ondřej Rajnet
+    </p>
+  </div>
+</div> 

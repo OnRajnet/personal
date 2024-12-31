@@ -1,16 +1,19 @@
-import { createTransport, type Transporter } from "nodemailer";
-import type { Attachment } from 'nodemailer/lib/mailer';
+import { Resend } from 'resend';
+import { renderEmailTemplate } from './renderEmailTemplate';
 
 type SendEmailOptions = {
   to: string;
   subject: string;
-  // html: string;
 };
 
 async function downloadDriveFile(fileId: string) {
   try {
     const url = `https://drive.google.com/uc?export=download&id=${fileId}`;
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      cache: 'force-cache'
+      // Alternative if you want to revalidate after some time:
+      // next: { revalidate: 86400 } // 24 hours
+    });
     
     if (!response.ok) {
       throw new Error(`Failed to download file: ${response.statusText}`);
@@ -24,52 +27,20 @@ async function downloadDriveFile(fileId: string) {
   }
 }
 
-export async function sendEmail(options: SendEmailOptions): Promise<Transporter> {
-  const transporter = await getEmailTransporter();
+export async function sendEmail(options: SendEmailOptions) {
+  const resend = new Resend(import.meta.env.RESEND_API_KEY);
 
   const fileBuffer = await downloadDriveFile(import.meta.env.EBOOK_GOOGLE_ID);
-  
-  console.log("send email", fileBuffer);
-  return new Promise(async (resolve, reject) => {
-    const { to, subject } = options;
-    const from = import.meta.env.SEND_EMAIL_FROM;
-    const message = { to, subject, from };
-    const attachments: Attachment[] = [
-      {
-        filename: "e-book.pdf",
-        content: fileBuffer,
-        contentType: "application/pdf"
-      },
-    ];
+  const htmlContent = await renderEmailTemplate(options.to);
 
-    transporter.sendMail({
-      ...message,
-      html: `test`,
-      attachments
-    }, (err, info) => {
-      // Log the error if one occurred
-      if (err) {
-        console.error(err);
-        reject(err);
-      }
-      // Log the message ID and preview URL if available.
-      console.log("Message sent:", info.messageId);
-      resolve(info);
-    });
-  });
-}
-
-async function getEmailTransporter(): Promise<Transporter> {
-  return new Promise((resolve, reject) => {
-    if (!import.meta.env.RESEND_API_KEY) {
-      throw new Error("Missing Resend configuration");
-    }
-    const transporter = createTransport({
-      host: "smtp.resend.com",
-      secure: true,
-      port: 465,
-      auth: { user: "resend", pass: import.meta.env.RESEND_API_KEY },
-    });
-    resolve(transporter);
+  return await resend.emails.send({
+    from: import.meta.env.SEND_EMAIL_FROM,
+    to: options.to,
+    subject: options.subject,
+    html: htmlContent,
+    attachments: [{
+      filename: 'e-book.pdf',
+      content: fileBuffer
+    }]
   });
 }
