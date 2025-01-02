@@ -14,10 +14,7 @@ export default defineConfig({
     icon()
   ],
   output: "server",
-  adapter: vercel({
-    edgeMiddleware: true,
-    functionPerRoute: true
-  }),
+  adapter: vercel(),
 
   vite: {
     build: {

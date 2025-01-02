@@ -1,12 +1,6 @@
 ---
 import EbookTemplate from '../components/emails/EbookTemplate.astro';
 
-// Set Edge runtime
-export const config = {
-  runtime: 'edge',
-  regions: 'all'
-};
-
 // Get email from query parameter
 const recipientEmail = Astro.url.searchParams.get('recipientEmail') || '';
 

@@ -3,10 +3,6 @@ import EbookTemplate from '../../components/emails/EbookTemplate.astro';
 
 export const prerender = false;
 
-export const config = {
-    runtime: 'edge'
- };
-
 export const GET: APIRoute = async ({ url }) => {
   const recipientEmail = url.searchParams.get('email') || '';
   const { default: component } = EbookTemplate;
