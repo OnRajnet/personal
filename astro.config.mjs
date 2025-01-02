@@ -4,8 +4,7 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import icon from "astro-icon";
 
-import { fileURLToPath } from 'url';
-import vercel from "@astrojs/vercel";
+import vercel from "@astrojs/vercel/serverless";
 
 export default defineConfig({
   site: "https://www.ondrejrajnet.cz",
@@ -16,7 +15,9 @@ export default defineConfig({
     icon()
   ],
   output: "server",
-  adapter: vercel(),
+  adapter: vercel({
+    webAnalytics: true
+  }),
 
   vite: {
     build: {
@@ -27,8 +28,5 @@ export default defineConfig({
     optimizeDeps: {
       exclude: ["fsevents"],
     },
-    define: {
-      'process.env.RUNTIME_DIR': JSON.stringify(fileURLToPath(new URL('.', import.meta.url)))
-    }
   },
 });
