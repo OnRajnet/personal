@@ -14,6 +14,13 @@ import { Icon } from "astro-icon/components";
     <p class="text-lg text-muted-foreground max-w-[600px]">
       Jsem finanční průvodce, který pomáhá lidem zlepšit jejich vztah k penězům a dosáhnout finanční nezávislosti. Sdílím své zkušenosti a nabízím komplexní spolupráci včetně vzdělávání, motivace a individuálního poradenství.
     </p>
+
+    <h2 class="text-2xl font-bold">Chceš zjistit, proč ti to (ne)funguje?</h2>
+    <p>
+      Získej zdarma e-book <strong>"Proč ti to nefunguje"</strong>, ve kterém najdeš 5 praktických pohledů na finance, které tě mohou brzdit. E-book obsahuje také odkaz na kvíz, díky kterému zjistíš, jak na tom jsi, a v jaké oblasti můžeš nejvíce zapracovat.
+      <br>
+      Navíc ti každých 14 dní pošlu přehled těch nejdůležitějších novinek ze světa financí, investic a mindsetu, abys byl(a) vždy o krok napřed.
+    </p>
     
     <div class="flex flex-col gap-3 items-start w-full sm:w-auto">
       <div id="status-message" class:list={["text-sm max-w-xl hidden"]}></div>
@@ -35,7 +42,7 @@ import { Icon } from "astro-icon/components";
           ]}
           name="recipient"
         />
-        <input type="hidden" name="subject" value="E-BOOK ZDARMA" />
+        <input type="hidden" name="subject" value='Tvůj e-book "Proč ti to nefunguje" je tady!' />
         <Button type="submit" class="bg-black hover:bg-gray-800 text-white">
           E-BOOK ZDARMA
         </Button>
