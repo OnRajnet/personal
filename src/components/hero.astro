@@ -6,8 +6,58 @@ import Button from "./ui/button.astro";
 import { Icon } from "astro-icon/components";
 ---
 
-<main class="grid lg:grid-cols-2 place-items-center pt-16 pb-8 md:pt-12 md:pb-24">
-  <div class="py-6 md:order-1 hidden md:block">
+<div class="grid lg:grid-cols-2 gap-8 items-center max-w-7xl mx-auto px-4 py-12 pb-8 md:pt-12 md:pb-24">
+  <div class="space-y-6">
+    <h1 class="text-4xl sm:text-5xl font-bold tracking-tight">
+      Jmenuji se Ondřej Rajnet
+    </h1>
+    <p class="text-lg text-muted-foreground max-w-[600px]">
+      Jsem finanční průvodce, který pomáhá lidem zlepšit jejich vztah k penězům a dosáhnout finanční nezávislosti. Sdílím své zkušenosti a nabízím komplexní spolupráci včetně vzdělávání, motivace a individuálního poradenství.
+    </p>
+    
+    <div class="flex flex-col gap-3 items-start w-full sm:w-auto">
+      <div id="status-message" class:list={["text-sm max-w-xl hidden"]}></div>
+
+      <div id="error-message" class:list={["text-sm text-red-500 max-w-xl hidden"]}></div>
+   
+      <form class="flex flex-col sm:flex-row gap-3 sm:max-w-md w-full"
+        method="POST"
+        id="email-form"
+      >
+        <input
+          type="text"
+          placeholder="E-mail"
+          required
+          class:list={[
+
+            "flex w-full rounded-md border border-input bg-background px-4 py-3 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ring-gray-100",
+            'flex-1'
+          ]}
+          name="recipient"
+        />
+        <input type="hidden" name="subject" value="E-BOOK ZDARMA" />
+        <Button type="submit" class="bg-black hover:bg-gray-800 text-white">
+          E-BOOK ZDARMA
+        </Button>
+      </form>
+
+      <Link 
+        variant="outline" 
+        class="w-full sm:w-auto" 
+        class="flex w-full sm:w-auto gap-1 items-center justify-center"
+        style="outline"
+        rel="noopener"
+        id="playVideo"
+        href="#"
+        target="_blank"
+      >
+        <Icon class="text-black w-4 h-4" name="bx:bxs-video" />
+        Úvodní video
+      </Link>
+    </div>
+  </div>
+  
+  <div class="relative h-[500px] hidden lg:block">
     <Picture
       src={personalImage}
       alt="Ondřej Rajnet"
@@ -15,53 +65,10 @@ import { Icon } from "astro-icon/components";
       sizes="(max-width: 800px) 100vw, 620px"
       loading="eager"
       formats={['avif', 'webp']}
+      class="absolute inset-0 w-full h-full object-cover rounded-lg"
     />
   </div>
-  <div>
-    <h1 class="text-5xl lg:text-6xl xl:text-7xl font-bold lg:tracking-tight xl:tracking-tighter">
-      Jmenuji se Ondřej Rajnet
-    </h1>
-    <p class="text-lg mt-4 text-slate-600 max-w-xl">
-      Jsem finanční průvodce, který pomáhá lidem zlepšit jejich vztah k penězům a dosáhnout finanční nezávislosti. Sdílím své zkušenosti a nabízím komplexní spolupráci včetně vzdělávání, motivace a individuálního poradenství.
-    </p>
-
-    <div id="status-message" class:list={["text-lg mt-4 max-w-xl hidden"]}></div>
-
-   <div id="error-message" class:list={["text-lg mt-4 text-red-500 max-w-xl hidden"]}></div>
-
-    <form 
-      class="mt-6 flex flex-col sm:flex-row gap-3"
-      method="POST"
-      id="email-form"
-    >
-      <input
-        type="text"
-        placeholder="E-mail"
-        required
-        class="w-full px-4 py-3 border-2 placeholder:text-gray-800 rounded-md outline-none focus:ring-4 border-gray-300 focus:border-gray-600 ring-gray-100"
-        name="recipient"
-      />
-      <input type="hidden" name="subject" value="E-BOOK ZDARMA" />
-
-      <Button type="submit" size="md" block>
-        E-BOOK ZDARMA
-      </Button>
-    </form>
-
-    <div class="mt-2">
-      <Link
-        size="lg"
-        style="outline"
-        rel="noopener"
-        href="#"
-        class="flex gap-1 items-center justify-center"
-        target="_blank">
-        <Icon class="text-black w-4 h-4" name="bx:bxs-video" />
-        Úvodní video
-      </Link>
-    </div>
-  </div>
-</main>
+</div>
 
 <script>
   const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
