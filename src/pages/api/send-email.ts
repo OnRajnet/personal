@@ -3,9 +3,9 @@ import { sendEmail } from "../../utils/email";
 
 export const prerender = false;
 
-// export const config = {
-//   runtime: 'edge'
-// };
+export const config = {
+   runtime: 'edge'
+};
 
 export const POST: APIRoute = async ({ request }) => {
   const formData = await request.formData();

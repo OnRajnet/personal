@@ -4,7 +4,7 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import icon from "astro-icon";
 
-import vercel from "@astrojs/vercel/serverless";
+import vercel from "@astrojs/vercel";
 
 export default defineConfig({
   site: "https://www.ondrejrajnet.cz",
@@ -15,9 +15,7 @@ export default defineConfig({
     icon()
   ],
   output: "server",
-  adapter: vercel({
-    webAnalytics: true
-  }),
+  adapter: vercel(),
 
   vite: {
     build: {

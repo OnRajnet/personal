@@ -5,7 +5,11 @@ export async function renderEmailTemplate(recipientEmail: string) {
     const url = new URL('/email-preview', baseUrl);
     url.searchParams.set('recipientEmail', recipientEmail);
 
-    const response = await fetch(url.toString());
+    const response = await fetch(url.toString(),
+      {
+        cache: 'force-cache'
+      }
+    );
     if (!response.ok) {
       throw new Error(`Failed to fetch template: ${response.statusText}`);
     }
