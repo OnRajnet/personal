@@ -1,6 +1,4 @@
-import type { APIRoute } from 'astro';
 import { experimental_AstroContainer } from "astro/container";
-
 
 import EbookTemplate from '../components/emails/EbookTemplate.astro';
 
@@ -11,4 +9,4 @@ export async function renderEmailTemplate(recipientEmail: string) {
         recipientEmail 
     }
   });
-} 
+}
