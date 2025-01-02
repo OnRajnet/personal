@@ -19,8 +19,14 @@ async function downloadDriveFile(fileId: string) {
       throw new Error(`Failed to download file: ${response.statusText}`);
     }
     
+    // Convert ArrayBuffer to base64
     const arrayBuffer = await response.arrayBuffer();
-    return Buffer.from(arrayBuffer);
+    const uint8Array = new Uint8Array(arrayBuffer);
+    let binaryString = '';
+    uint8Array.forEach(byte => binaryString += String.fromCharCode(byte));
+    const base64String = btoa(binaryString);
+    
+    return base64String;
   } catch (error) {
     console.error("Error downloading file from Google Drive:", error);
     throw error;
@@ -30,7 +36,7 @@ async function downloadDriveFile(fileId: string) {
 export async function sendEmail(options: SendEmailOptions) {
   const resend = new Resend(import.meta.env.RESEND_API_KEY);
 
-  const fileBuffer = await downloadDriveFile(import.meta.env.EBOOK_GOOGLE_ID);
+  const fileBase64 = await downloadDriveFile(import.meta.env.EBOOK_GOOGLE_ID);
   const htmlContent = await renderEmailTemplate(options.to);
 
   return await resend.emails.send({
@@ -40,7 +46,7 @@ export async function sendEmail(options: SendEmailOptions) {
     html: htmlContent,
     attachments: [{
       filename: 'e-book.pdf',
-      content: fileBuffer
+      content: fileBase64,
     }]
   });
 }
