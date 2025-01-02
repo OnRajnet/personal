@@ -1,43 +1,48 @@
 import type { APIRoute } from "astro";
 import { sendEmail } from "../../utils/email";
+import { isValidEmail } from "../../utils/isValidEmail";
 
 export const prerender = false;
 
-export const config = {
-  runtime: 'edge'
+// Add response headers helper
+const createResponse = (body: object, status: number) => {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
 };
 
 export const POST: APIRoute = async ({ request }) => {
-  const formData = await request.formData();
-  const to = formData.get("recipient") as string | null;
-  const subject = formData.get("subject") as string | null;
-  // const message = formData.get("message") as string | null;
-
-  if (!to || !subject) { //|| !message) {
-    return new Response(JSON.stringify({ error: "Missing email" }), {
-      status: 400,
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-  }
-
   try {
-    await sendEmail({ to, subject });
+    const formData = await request.formData();
+    const to = formData.get("recipient") as string;
+    const subject = formData.get("subject") as string;
 
-    return new Response(JSON.stringify({ success: true }), {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json'
-      }
+    // Validate inputs early
+    if (!to || !subject) {
+      return createResponse({ error: "Missing required fields" }, 400);
+    }
+
+    // Validate email format
+    if (!isValidEmail(to)) {
+      return createResponse({ error: "Invalid email format" }, 400);
+    }
+
+    // Send email with timeout
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Email sending timeout')), 5000);
     });
+
+    const emailPromise = sendEmail({ to, subject });
+    await Promise.race([emailPromise, timeoutPromise]);
+
+    return createResponse({ success: true }, 200);
 
   } catch (error) {
-    return new Response(JSON.stringify({ error: "Failed to send email" }), {
-      status: 500,
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+    console.error('Email sending error:', error);
+    const message = error instanceof Error ? error.message : "Failed to send email";
+    return createResponse({ error: message }, 500);
   }
 };

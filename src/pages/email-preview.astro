@@ -1,5 +1,10 @@
 ---
 import EbookTemplate from '../components/emails/EbookTemplate.astro';
----
 
-<EbookTemplate recipientEmail="test@example.com" /> 
+// Get email from query parameter
+const recipientEmail = Astro.url.searchParams.get('recipientEmail') || '';
+
+// Return only the HTML without any layout
+export const partial = true;
+---
+<EbookTemplate recipientEmail={recipientEmail} /> 
