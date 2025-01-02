@@ -12,8 +12,19 @@ export default defineConfig({
     tailwind(),
     mdx(),
     sitemap(),
-    icon(),
+    icon()
   ],
   output: "server",
   adapter: vercel(),
+
+  vite: {
+    build: {
+      rollupOptions: {
+        external: ["fsevents"],
+      },
+    },
+    optimizeDeps: {
+      exclude: ["fsevents"],
+    },
+  },
 });
