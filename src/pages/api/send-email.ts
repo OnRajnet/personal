@@ -4,7 +4,8 @@ import { sendEmail } from "../../utils/email";
 export const prerender = false;
 
 export const config = {
-   runtime: 'edge'
+  runtime: 'edge',
+  regions: 'all' // Optional: deploy to all regions
 };
 
 export const POST: APIRoute = async ({ request }) => {
