@@ -3,9 +3,9 @@ import { sendEmail } from "../../utils/email";
 
 export const prerender = false;
 
-export const config = {
-  runtime: 'edge'
-};
+// export const config = {
+//   runtime: 'edge'
+// };
 
 export const POST: APIRoute = async ({ request }) => {
   const formData = await request.formData();
@@ -33,6 +33,7 @@ export const POST: APIRoute = async ({ request }) => {
     });
 
   } catch (error) {
+    console.error('Email sending error:', error);
     return new Response(JSON.stringify({ error: "Failed to send email" }), {
       status: 500,
       headers: {
