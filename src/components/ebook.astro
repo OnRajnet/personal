@@ -1,0 +1,141 @@
+---
+import Card from './ui/card.astro';
+import Button from './ui/button.astro';
+import Link from './ui/link.astro';
+import { Icon } from "astro-icon/components";
+---
+
+<section class="py-12 bg-muted/50">
+  <div class="container mx-auto px-4">
+    <div class="max-w-2xl mx-auto text-center">
+      <Card>
+        <h2 class="text-3xl pb-4 font-semibold">
+          Objev cestu k úspěšnému investování!
+        </h2>
+
+        <p class="text-gray-600 pb-2">
+          V tomto e-booku ti předám <strong>10 cenných rad</strong>, které jsem
+          sestavil na základě svých letitých zkušeností. Najdeš v něm nejen
+          praktické tipy, jak překonat nejčastější chyby, ale také způsob, jak
+          změnit svůj přístup k penězům a investování.
+        </p>
+        <p class="text-gray-600 pb-2">
+          Zjisti, <strong>co tě může brzdit</strong> a jak udělat první krok ke klidnějšímu,
+          svobodnějšímu a úspěšnějšímu finančnímu životu.
+        </p>
+        <p class="font-semibold pb-4">
+          📖 Stáhni si e-book zdarma a začni hned teď!
+        </p>
+
+        <div>
+            <div class="sm:max-w-md w-full m-auto">
+                <div id="status-message" class:list={['text-sm text-left max-w-xl hidden']}>
+                </div>
+                
+                <div
+                id="error-message"
+                class:list={['text-sm text-left text-red-500 max-w-xl hidden']}>
+            </div>
+        </div>
+
+          <form
+            class="flex flex-col m-auto sm:flex-row gap-3 sm:max-w-md w-full"
+            method="POST"
+            id="email-form">
+            <div class="flex flex-col w-full space-y-4">
+              <input
+                type="text"
+                placeholder="E-mail"
+                required
+                class:list={[
+                  'flex w-full rounded-md border border-input bg-background px-4 py-3 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ring-gray-100',
+                  'flex-1',
+                ]}
+                name="recipient"
+              />
+              <input
+                type="hidden"
+                name="subject"
+                value='Tvůj e-book "Proč ti to nefunguje" je tady!'
+              />
+              <Button
+                type="submit"
+                class="bg-black hover:bg-gray-800 text-white">
+                E-BOOK ZDARMA
+              </Button>
+            </div>
+          </form>
+
+          <div class="m-auto mt-4 flex justify-center">
+            <Link
+              variant="outline"
+              class="w-full sm:w-auto"
+              class="flex w-full sm:w-auto gap-1 items-center justify-center"
+              style="outline"
+              rel="noopener"
+              id="playVideo"
+              href="#"
+              target="_blank">
+              <Icon class="text-black w-4 h-4" name="bx:bxs-video" />
+              Úvodní video
+            </Link>
+          </div>
+        </div>
+      </Card>
+    </div>
+  </div>
+</section>
+
+<script>
+  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  function isValidEmail(email: string): boolean {
+    return EMAIL_REGEX.test(email);
+  }
+
+  const form = document.getElementById('email-form') as HTMLFormElement;
+  const statusMessage = document.getElementById('status-message');
+  const errorMessage = document.getElementById('error-message');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    const email = formData.get('recipient') as string;
+
+    // Clear previous messages
+    statusMessage?.classList.add('hidden');
+    errorMessage?.classList.add('hidden');
+    errorMessage?.classList.remove('text-red-500', 'text-green-500');
+
+    // Validate email
+    if (email && !isValidEmail(email)) {
+      errorMessage!.textContent = 'Neplatný e-mail';
+      errorMessage?.classList.remove('hidden');
+      errorMessage?.classList.add('text-red-500');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        statusMessage!.textContent = 'Email byl odeslán.';
+        statusMessage?.classList.remove('hidden');
+        statusMessage?.classList.add('text-green-500');
+        form.reset();
+      } else {
+        throw new Error(result.error || 'Something went wrong');
+      }
+    } catch (error) {
+      errorMessage!.textContent = 'Něco se pokazilo!!!';
+      errorMessage?.classList.remove('hidden');
+      errorMessage?.classList.add('text-red-500');
+    }
+  });
+</script>
