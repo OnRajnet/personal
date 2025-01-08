@@ -1,12 +1,9 @@
 ---
 import { Picture } from "astro:assets";
 import personalImage from "assets/portrait.jpg"
-import Link from "./ui/link.astro";
-import Button from "./ui/button.astro";
-import { Icon } from "astro-icon/components";
 ---
 
-<div class="grid lg:grid-cols-2 gap-8 items-center max-w-7xl mx-auto px-4 py-12 pb-8 md:pt-12 md:pb-24">
+<div class="grid lg:grid-cols-2 gap-8 items-center max-w-7xl mx-auto px-4 py-12 pb-8 md:pt-12">
   <div class="space-y-6">
     <h1 class="text-4xl sm:text-5xl font-bold tracking-tight">
       Jmenuji se Ondřej Rajnet
@@ -14,54 +11,6 @@ import { Icon } from "astro-icon/components";
     <p class="text-lg text-muted-foreground max-w-[600px]">
       Jsem finanční průvodce, který pomáhá lidem zlepšit jejich vztah k penězům a dosáhnout finanční nezávislosti. Sdílím své zkušenosti a nabízím komplexní spolupráci včetně vzdělávání, motivace a individuálního poradenství.
     </p>
-
-    <h2 class="text-2xl font-bold">Chceš zjistit, proč ti to (ne)funguje?</h2>
-    <p>
-      Získej zdarma e-book <strong>"Proč ti to nefunguje"</strong>, ve kterém najdeš 5 praktických pohledů na finance, které tě mohou brzdit. E-book obsahuje také odkaz na kvíz, díky kterému zjistíš, jak na tom jsi, a v jaké oblasti můžeš nejvíce zapracovat.
-      <br>
-      Navíc ti každých 14 dní pošlu přehled těch nejdůležitějších novinek ze světa financí, investic a mindsetu, abys byl(a) vždy o krok napřed.
-    </p>
-    
-    <div class="flex flex-col gap-3 items-start w-full sm:w-auto">
-      <div id="status-message" class:list={["text-sm max-w-xl hidden"]}></div>
-
-      <div id="error-message" class:list={["text-sm text-red-500 max-w-xl hidden"]}></div>
-   
-      <form class="flex flex-col sm:flex-row gap-3 sm:max-w-md w-full"
-        method="POST"
-        id="email-form"
-      >
-        <input
-          type="text"
-          placeholder="E-mail"
-          required
-          class:list={[
-
-            "flex w-full rounded-md border border-input bg-background px-4 py-3 ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ring-gray-100",
-            'flex-1'
-          ]}
-          name="recipient"
-        />
-        <input type="hidden" name="subject" value='Tvůj e-book "Proč ti to nefunguje" je tady!' />
-        <Button type="submit" class="bg-black hover:bg-gray-800 text-white">
-          E-BOOK ZDARMA
-        </Button>
-      </form>
-
-      <Link 
-        variant="outline" 
-        class="w-full sm:w-auto" 
-        class="flex w-full sm:w-auto gap-1 items-center justify-center"
-        style="outline"
-        rel="noopener"
-        id="playVideo"
-        href="#"
-        target="_blank"
-      >
-        <Icon class="text-black w-4 h-4" name="bx:bxs-video" />
-        Úvodní video
-      </Link>
-    </div>
   </div>
   
   <div class="relative h-[500px] hidden lg:block">
@@ -77,56 +26,3 @@ import { Icon } from "astro-icon/components";
   </div>
 </div>
 
-<script>
-  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-function isValidEmail(email: string): boolean {
-  return EMAIL_REGEX.test(email);
-}
-
-  const form = document.getElementById('email-form') as HTMLFormElement;
-  const statusMessage = document.getElementById('status-message');
-  const errorMessage = document.getElementById('error-message');
-
-  form?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const formData = new FormData(form);
-    const email = formData.get('recipient') as string;
-
-    // Clear previous messages
-    statusMessage?.classList.add('hidden');
-    errorMessage?.classList.add('hidden');
-    errorMessage?.classList.remove('text-red-500', 'text-green-500');
-
-    // Validate email
-    if (email && !isValidEmail(email)) {
-      errorMessage!.textContent = "Neplatný e-mail";
-      errorMessage?.classList.remove('hidden');
-      errorMessage?.classList.add('text-red-500');
-      return;
-    }
-
-    try {
-      const response = await fetch('/api/send-email', {
-        method: 'POST',
-        body: formData
-      });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        statusMessage!.textContent = "Email byl odeslán.";
-        statusMessage?.classList.remove('hidden');
-        statusMessage?.classList.add('text-green-500');
-        form.reset();
-      } else {
-        throw new Error(result.error || 'Something went wrong');
-      }
-    } catch (error) {
-      errorMessage!.textContent = "Něco se pokazilo!!!";
-      errorMessage?.classList.remove('hidden');
-      errorMessage?.classList.add('text-red-500');
-    }
-  });
-</script>
